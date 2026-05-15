@@ -1,7 +1,7 @@
 {
   "name": "email-manager",
-  "version": "0.1.0",
-  "description": "Ler, buscar, resumir, preparar respostas e enviar emails via IMAP/SMTP com confirmacao explicita antes de envio.",
+  "version": "0.2.0",
+  "description": "Ler, buscar, resumir, preparar respostas e enviar emails via IMAP/SMTP com wizard de configuracao e confirmacao explicita antes de envio.",
   "author": "QuickClaw-Skills",
   "license": "Proprietary",
   "homepage": "https://github.com/natanaelhx/protonskill",

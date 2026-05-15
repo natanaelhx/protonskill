@@ -1,12 +1,13 @@
 ---
 name: email-manager
 description: >
-  Ler, buscar, resumir e enviar emails por IMAP/SMTP usando uma CLI local segura.
-  Use quando o usuario pedir caixa de entrada, emails nao lidos, busca de
-  mensagens, resumo de conversas, follow-up, rascunho de resposta ou envio de
-  email. Exige configuracao de conta e credenciais em variaveis de ambiente.
-  Keywords: email, e-mail, inbox, caixa de entrada, unread, nao lidos, responder,
-  reply, enviar email, send mail, IMAP, SMTP, Gmail, Outlook
+  Ler, buscar, resumir e enviar emails por IMAP/SMTP usando uma CLI local segura
+  e um wizard de configuracao passo a passo. Use quando o usuario pedir caixa de
+  entrada, emails nao lidos, busca de mensagens, resumo de conversas, follow-up,
+  rascunho de resposta, envio de email ou configuracao IMAP/SMTP. Exige conta e
+  credenciais em variaveis de ambiente. Keywords: email, e-mail, inbox, wizard,
+  caixa de entrada, unread, nao lidos, responder, reply, enviar email, send mail,
+  IMAP, SMTP, Gmail, Outlook
 ---
 
 # Email Manager
@@ -21,9 +22,20 @@ Skill path:
 ~/.openclaw/skills/email-manager
 ```
 
-1. Se a configuracao ainda nao existir, leia `references/config.md`.
-2. Crie ou valide `~/.openclaw/state/email-manager/config.json`.
-3. Use sempre a CLI local para interagir com emails:
+1. Se a configuracao ainda nao existir, rode o wizard:
+
+```bash
+python3 ~/.openclaw/skills/email-manager/scripts/configure_wizard.py
+```
+
+2. Defina as variaveis de ambiente que o wizard mostrar.
+3. Valide a conta:
+
+```bash
+python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py check-config --connect
+```
+
+4. Use sempre a CLI local para interagir com emails:
 
 ```bash
 python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py check-config
@@ -33,7 +45,21 @@ python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py show <uid>
 
 ## Workflow
 
-### 1. Verificar Configuracao
+### 1. Rodar Wizard De Configuracao
+
+Quando o usuario pedir para configurar email, conduza o passo a passo com `scripts/configure_wizard.py`. O wizard pergunta uma informacao por vez:
+
+- nome da conta;
+- provedor (`gmail`, `outlook` ou `custom`);
+- email/login;
+- nome do remetente;
+- nomes das variaveis de ambiente;
+- host/porta/SSL somente quando o provedor for custom;
+- mailbox IMAP.
+
+O wizard nunca pede nem grava a senha. Ele grava apenas host, porta, remetente e nomes de env vars em `~/.openclaw/state/email-manager/config.json`.
+
+### 2. Verificar Configuracao
 
 Rode `check-config` antes de acessar a caixa. Se faltar config ou variavel de ambiente, explique ao usuario exatamente o que falta e aponte `references/config.md`.
 
@@ -41,7 +67,7 @@ Rode `check-config` antes de acessar a caixa. Se faltar config ou variavel de am
 python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py check-config --account main
 ```
 
-### 2. Ler E Buscar Emails
+### 3. Ler E Buscar Emails
 
 Para triagem, comece por uma lista pequena e depois abra apenas os UIDs relevantes:
 
@@ -54,7 +80,7 @@ python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py show 12345 --max-b
 
 Ao responder ao usuario, inclua `uid`, remetente, assunto e data para cada email citado. Resuma conteudo longo antes de colar texto completo.
 
-### 3. Preparar Respostas
+### 4. Preparar Respostas
 
 Quando o usuario pedir para responder, primeiro mostre um rascunho com destinatarios, assunto e corpo. Para respostas encadeadas, use `--reply-to-uid` no dry-run:
 
@@ -64,7 +90,7 @@ python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py send \
   --body-file /tmp/email-reply.txt
 ```
 
-### 4. Enviar Emails
+### 5. Enviar Emails
 
 Envio e uma acao externa. Nunca envie sem confirmacao explicita do usuario no turno atual depois de mostrar o rascunho final.
 
@@ -121,4 +147,5 @@ Resposta esperada: gerar dry-run com destinatario e assunto encadeados, mostrar 
 ## Recursos
 
 - `scripts/email_cli.py`: CLI sem dependencias externas para IMAP/SMTP.
+- `scripts/configure_wizard.py`: wizard interativo para criar o config da conta.
 - `references/config.md`: formato de configuracao, variaveis de ambiente e exemplos por provedor.

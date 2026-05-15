@@ -11,6 +11,17 @@ The CLI also accepts `--config /path/to/config.json` before the subcommand.
 
 ## Create A Sample Config
 
+Recommended guided setup:
+
+```bash
+python3 ~/.openclaw/skills/email-manager/scripts/configure_wizard.py
+```
+
+The wizard asks one question at a time and writes the JSON config without asking
+for or storing the password.
+
+Manual sample:
+
 ```bash
 python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py init-config --print
 ```
