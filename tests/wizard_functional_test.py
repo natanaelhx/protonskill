@@ -19,11 +19,18 @@ def main() -> None:
         config_path = Path(tmp) / "config.json"
         answers = "\n".join(
             [
-                "main",
-                "gmail",
+                "proton",
+                "proton-bridge",
                 "bot@example.com",
                 "Bot Example",
-                "EMAIL_MAIN",
+                "EMAIL_PROTON",
+                "127.0.0.1",
+                "1143",
+                "n",
+                "127.0.0.1",
+                "1025",
+                "n",
+                "n",
                 "INBOX",
                 "",
             ]
@@ -39,15 +46,15 @@ def main() -> None:
             raise AssertionError(f"wizard failed\nstdout={result.stdout}\nstderr={result.stderr}")
 
         config = json.loads(config_path.read_text(encoding="utf-8"))
-        account = config["accounts"]["main"]
+        account = config["accounts"]["proton"]
         assert account["from"] == "Bot Example <bot@example.com>"
-        assert account["imap"]["host"] == "imap.gmail.com"
-        assert account["imap"]["port"] == 993
-        assert account["smtp"]["host"] == "smtp.gmail.com"
-        assert account["smtp"]["port"] == 465
-        assert account["imap"]["user_env"] == "EMAIL_MAIN_USER"
-        assert account["smtp"]["password_env"] == "EMAIL_MAIN_PASSWORD"
-        assert "EMAIL_MAIN_PASSWORD" in result.stdout
+        assert account["imap"]["host"] == "127.0.0.1"
+        assert account["imap"]["port"] == 1143
+        assert account["smtp"]["host"] == "127.0.0.1"
+        assert account["smtp"]["port"] == 1025
+        assert account["imap"]["user_env"] == "EMAIL_PROTON_USER"
+        assert account["smtp"]["password_env"] == "EMAIL_PROTON_PASSWORD"
+        assert "EMAIL_PROTON_PASSWORD" in result.stdout
 
     print("wizard functional test passed")
 

@@ -208,7 +208,7 @@ def main() -> None:
         raise smtp.error
 
     with tempfile.TemporaryDirectory() as tmp:
-        config = Path(tmp) / "email-manager.json"
+        config = Path(tmp) / "protonskill.json"
         config.write_text(
             json.dumps(
                 {

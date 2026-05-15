@@ -1,7 +1,7 @@
 {
-  "name": "email-manager",
-  "version": "0.2.0",
-  "description": "Ler, buscar, resumir, preparar respostas e enviar emails via IMAP/SMTP com wizard de configuracao e confirmacao explicita antes de envio.",
+  "name": "protonskill",
+  "version": "0.3.0",
+  "description": "Ler, buscar, resumir, preparar respostas e enviar emails do Proton Mail via Proton Mail Bridge local, com wizard de configuracao e confirmacao explicita antes de envio.",
   "author": "QuickClaw-Skills",
   "license": "Proprietary",
   "homepage": "https://github.com/natanaelhx/protonskill",
@@ -24,6 +24,9 @@
   },
   "pricing_tier": "free",
   "tags": [
+    "proton",
+    "proton-mail",
+    "proton-bridge",
     "email",
     "imap",
     "smtp",

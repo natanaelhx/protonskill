@@ -1,4 +1,4 @@
 interface:
-  display_name: "Email Manager"
-  short_description: "Configurar, ler e enviar emails com seguranca"
-  default_prompt: "Use $email-manager to configure IMAP/SMTP with the wizard, review unread emails, and draft replies before asking for approval to send."
+  display_name: "Protonskill"
+  short_description: "Proton Mail Bridge para ler e enviar email"
+  default_prompt: "Use $protonskill to configure Proton Mail Bridge with the wizard, review unread emails, and draft replies before asking for approval to send."

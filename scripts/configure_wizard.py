@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive setup wizard for the email-manager skill."""
+"""Interactive setup wizard for the protonskill skill."""
 
 from __future__ import annotations
 
@@ -10,9 +10,14 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_CONFIG = Path("~/.openclaw/state/email-manager/config.json").expanduser()
+DEFAULT_CONFIG = Path("~/.openclaw/state/protonskill/config.json").expanduser()
 
 PROVIDERS: dict[str, dict[str, Any]] = {
+    "proton-bridge": {
+        "imap": {"host": "127.0.0.1", "port": 1143, "ssl": False, "mailbox": "INBOX"},
+        "smtp": {"host": "127.0.0.1", "port": 1025, "ssl": False, "starttls": False},
+        "note": "Requer Proton Mail Bridge rodando localmente e credenciais geradas pelo Bridge.",
+    },
     "gmail": {
         "imap": {"host": "imap.gmail.com", "port": 993, "ssl": True, "mailbox": "INBOX"},
         "smtp": {"host": "smtp.gmail.com", "port": 465, "ssl": True, "starttls": False},
@@ -63,17 +68,19 @@ def account_slug(raw: str) -> str:
 
 
 def build_config() -> tuple[dict[str, Any], str, str]:
-    print("Wizard Email Manager")
-    print("Este wizard cria o config IMAP/SMTP sem salvar senha no arquivo.")
+    print("Wizard Protonskill")
+    print("Este wizard cria o config do Proton Mail Bridge sem salvar senha no arquivo.")
     print()
 
-    account = account_slug(prompt("1. Nome da conta 🧩", "main"))
-    provider = prompt("2. Provedor 📬 (gmail/outlook/custom)", "gmail").lower()
+    account = account_slug(prompt("1. Nome da conta 🧩", "proton"))
+    provider = prompt("2. Provedor 📬 (proton-bridge/gmail/outlook/custom)", "proton-bridge").lower()
     if provider not in PROVIDERS:
         provider = "custom"
     template = json.loads(json.dumps(PROVIDERS[provider]))
 
-    email_addr = prompt("3. Email/login da conta ✉️")
+    if template.get("note"):
+        print(f"Nota: {template['note']}")
+    email_addr = prompt("3. Email/remetente ✉️")
     display_name = prompt("4. Nome do remetente 👤", email_addr)
     prefix = prompt("5. Prefixo das env vars 🔐", env_prefix(account)).upper()
     user_env = f"{prefix}_USER"
@@ -82,7 +89,7 @@ def build_config() -> tuple[dict[str, Any], str, str]:
     imap = template["imap"]
     smtp = template["smtp"]
     step = 6
-    if provider == "custom":
+    if provider in {"custom", "proton-bridge"}:
         imap["host"] = prompt(f"{step}. Host IMAP 📥", imap["host"] or "imap.example.com")
         step += 1
         imap["port"] = prompt_int(f"{step}. Porta IMAP 🔌", int(imap["port"]))
@@ -139,10 +146,10 @@ def main() -> None:
     print(f"Config gravado em: {path}")
     print("Agora defina as credenciais no ambiente antes de usar a skill:")
     print(f'export {user_env}="seu-email@exemplo.com"')
-    print(f'export {password_env}="app-password-ou-senha-do-provedor"')
+    print(f'export {password_env}="senha-gerada-pelo-proton-bridge"')
     print()
     print("Depois valide com:")
-    print("python3 ~/.openclaw/skills/email-manager/scripts/email_cli.py check-config --connect")
+    print("python3 ~/.openclaw/skills/protonskill/scripts/email_cli.py check-config --connect")
 
 
 if __name__ == "__main__":

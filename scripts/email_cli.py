@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Small IMAP/SMTP helper for the email-manager skill.
+"""Small IMAP/SMTP helper for the protonskill skill.
 
 Outputs JSON so an agent can parse results reliably. The script has no external
 dependencies and intentionally defaults to dry-run for sending.
@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_CONFIG = Path("~/.openclaw/state/email-manager/config.json").expanduser()
+DEFAULT_CONFIG = Path("~/.openclaw/state/protonskill/config.json").expanduser()
 
 
 class ConfigError(RuntimeError):
@@ -88,9 +88,7 @@ def fail(message: str, code: int = 2) -> None:
 def load_config(account_name: str | None) -> tuple[str, dict[str, Any]]:
     path = config_path()
     if not path.exists():
-        raise ConfigError(
-            f"Config not found at {path}. Run init-config or read references/config.md."
-        )
+        raise ConfigError(f"Config not found at {path}. Run configure_wizard.py first.")
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
@@ -538,7 +536,7 @@ def cmd_send(args: argparse.Namespace) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Email Manager IMAP/SMTP helper")
+    parser = argparse.ArgumentParser(description="Protonskill IMAP/SMTP helper")
     parser.add_argument("--config", help="Override EMAIL_MANAGER_CONFIG")
     sub = parser.add_subparsers(dest="command", required=True)
 

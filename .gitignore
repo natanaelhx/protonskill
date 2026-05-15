@@ -9,5 +9,6 @@ __pycache__/
 .pytest_cache/
 tmp/
 output/
+README.generated.md
 .DS_Store
 Thumbs.db
