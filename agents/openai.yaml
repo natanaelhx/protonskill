@@ -1,0 +1,4 @@
+interface:
+  display_name: "Email Manager"
+  short_description: "Ler, buscar e enviar emails com seguranca"
+  default_prompt: "Use $email-manager to review unread emails and draft any replies before asking for approval to send."
